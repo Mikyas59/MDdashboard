@@ -1,0 +1,51 @@
+---
+title: "Outbreak Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(incidence2)
+library(plotly)
+library(rio)
+
+linelist <- import("C:/Users/mikyas.duga/OneDrive - BoardSource/Documents/R/MDdashboard/linelist_cleaned.rds")
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+#Executive Summary
+### Cases By Hospital
+
+```{r}
+linelist %>%
+  count(hospital) %>%
+  rename("Hospital"= hospital,
+         "cases" = n) %>%
+  knitr::kable()
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+DT::datatable(linelist, 
+              rownames = FALSE, 
+              options = list(pageLength = 5, scrollX = TRUE), 
+              class = 'white-space: nowrap' )
+```
+
+### Interactive Plot
+
+```{r}
+age_outbreak <- incidence(linelist, date_onset, "week", groups = age_cat)
+plot(age_outbreak, fill = age_cat, col_pal = muted, title = "") %>% 
+  plotly::ggplotly()
+```
+
