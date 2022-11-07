@@ -1,9 +1,13 @@
 ---
 title: "Outbreak Dashboard"
+author: "Mikyas Duga - BoardSource"
+date: "`r Sys.Date()`"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: fill
+    vertical_layout: scroll
+  self_contained: true
+  mode: selfcontained
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +23,12 @@ linelist <- import("C:/Users/mikyas.duga/OneDrive - BoardSource/Documents/R/MDda
 Column {data-width=650}
 -----------------------------------------------------------------------
 #Executive Summary
-### Cases By Hospital
+
+This dashboard is a flexdashboard production. Damn son where'd you find this?
+
+
+
+# Cases By Hospital {data-navmenu="Cases"}
 
 ```{r}
 linelist %>%
@@ -29,10 +38,8 @@ linelist %>%
   knitr::kable()
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
 
-### Chart B
+# DataTable {data-navmenu="Case Counts"}
 
 ```{r}
 DT::datatable(linelist, 
@@ -41,11 +48,11 @@ DT::datatable(linelist,
               class = 'white-space: nowrap' )
 ```
 
-### Interactive Plot
+# Incidence Summary {data-navmenu="Incidence Plot"}
 
 ```{r}
 age_outbreak <- incidence(linelist, date_onset, "week", groups = age_cat)
-plot(age_outbreak, fill = age_cat, col_pal = muted, title = "") %>% 
+plot(age_outbreak, fill = age_cat, col_pal = muted, title = "")%>% 
   plotly::ggplotly()
 ```
 
